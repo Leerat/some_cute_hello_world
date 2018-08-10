@@ -12,7 +12,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `
 
-const Letters = ({items}) => items.map((letter, index) => (
+const Letters = ({items, animatedLetterNumber}) => items.map((letter, index) => (
   <Draggable key={`letter_${letter}_${index}`} draggableId={`${letter}_${index}`} index={index}>
     {(provided, snapshot) => (
       <div
@@ -22,7 +22,7 @@ const Letters = ({items}) => items.map((letter, index) => (
         style={provided.draggableProps.style}
       >
         <StyledLink to={`/${letter}`}>
-          <Letter letter={letter} />
+          <Letter letter={letter} isAnimated={animatedLetterNumber === index} />
         </StyledLink>
       </div>
     )}
@@ -44,6 +44,32 @@ const reorder = (list, startIndex, endIndex) => {
 
 class Phrase extends Component {
 
+  state = {
+    int: null,
+    animatedLetterNumber: null
+  }
+
+  componentDidMount () {
+    const int = setInterval(()=>{
+      this.setState({animatedLetterNumber: this.getAnimatedLetterNumber()})
+    }, 6000)
+
+    this.setState({
+      int: int,
+      animatedLetterNumber: this.getAnimatedLetterNumber()
+    })
+  }
+
+  getAnimatedLetterNumber = () => {
+    const { phrase } = this.props
+    return  Math.floor(Math.random() * phrase.length)
+  }
+
+  onDragStart = () => {
+    clearInterval(this.state.int)
+    this.setState({animatedLetterNumber: null})
+  }
+
   onDragEnd = result => {
     const { phrase, reorderPhrase } = this.props
 
@@ -61,10 +87,14 @@ class Phrase extends Component {
   }
 
   render() {
+    const { animatedLetterNumber } = this.state
     const { phrase } = this.props
 
     return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
+      <DragDropContext
+        onDragStart={this.onDragStart}
+        onDragEnd={this.onDragEnd}
+      >
         <Droppable droppableId="droppable" direction="horizontal">
           {(provided, snapshot) => (
             <div
@@ -73,7 +103,7 @@ class Phrase extends Component {
               style={phraseStyle}
             >
               {
-                <Letters items={phrase} />
+                <Letters items={phrase} animatedLetterNumber={animatedLetterNumber} />
               }
               {
                 provided.placeholder

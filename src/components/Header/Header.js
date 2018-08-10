@@ -8,6 +8,6 @@ const Body = styled.nav`
   }
 `
 
-const Header = () => <Body><a href="https://github.com">View source on github</a></Body>
+const Header = () => <Body><a href="https://github.com/Leerat/some_cute_hello_world">View source on github</a></Body>
 
 export default Header

@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 
 import Letter from 'components/Letter/Letter'
 import { getPhraseSelector } from 'components/Phrase/phraseSelectors'
 import { reorderPhrase } from 'components/Phrase/phraseActions'
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`
 
 const Letters = ({items}) => items.map((letter, index) => (
   <Draggable key={`letter_${letter}_${index}`} draggableId={`${letter}_${index}`} index={index}>
@@ -15,7 +21,9 @@ const Letters = ({items}) => items.map((letter, index) => (
         {...provided.dragHandleProps}
         style={provided.draggableProps.style}
       >
-        <Letter letter={letter} />
+        <StyledLink to={`/${letter}`}>
+          <Letter letter={letter} />
+        </StyledLink>
       </div>
     )}
   </Draggable>

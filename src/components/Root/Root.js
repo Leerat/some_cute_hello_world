@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
 import styled from 'styled-components'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import Header from 'components/Header/Header'
-import Button from 'components/UI/Button/Button'
 import Phrase from 'components/Phrase/Phrase'
+import BigLetter from 'components/BigLetter/BigLetter'
 
 const Body = styled.div`
   position: absolute;
@@ -20,11 +21,20 @@ const Body = styled.div`
   *:focus {
     outline: none;
   }
+  display: flex;
+  flex-direction: column;
 `
 
 const HelloWorld = styled.div`
+  flex: 1 1 auto;
   text-align: center;
-  margin-top: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const Centered = styled.div`
+  flex: 1;
 `
 
 class App extends Component {
@@ -41,18 +51,17 @@ class App extends Component {
     const { isComplete } = this.state
 
     return (
-      <Body>
-        <Header />
-        <HelloWorld>
-          <Phrase />
-          <div>
-            {isComplete ? `Hell yeah!` : `Work in progress`}
-          </div>
-          <div>
-            <Button onClick={this.toggleComplete}>{isComplete ? `Return to work` : `Complete it!`}</Button>
-          </div>
-        </HelloWorld>
-      </Body>
+      <Router>
+        <Body>
+          <Header />
+          <HelloWorld>
+            <Centered>
+              <Route exact path="/" component={Phrase} key="PhraseRoute" />
+              <Route exact path="/:letter" component={BigLetter} key="LettersRoute" />
+            </Centered>
+          </HelloWorld>
+        </Body>
+      </Router>
     )
   }
 }

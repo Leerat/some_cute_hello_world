@@ -34,6 +34,7 @@
     "@babel/preset-env": "^7.0.0-rc.1",
     "@babel/preset-react": "^7.0.0-rc.1",
     "babel-loader": "^8.0.0-beta.4",
+    "clean-webpack-plugin": "^0.1.19",
     "core-js": "^2.5.7",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",

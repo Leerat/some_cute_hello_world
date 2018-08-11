@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const isProduction = process.env.NODE_ENV === 'production'
 const isAnalyzing = process.env.ANALYZE
@@ -26,7 +27,7 @@ const config = {
   output: {
     filename: '[name].[hash].js',
     chunkFilename: '[name].[chunkhash].js',
-    path: path.resolve(root, 'dist/'),
+    path: path.resolve(root, 'docs'),
     publicPath: '/',
   },
   optimization: {
@@ -79,6 +80,7 @@ const config = {
       template: path.resolve(root, 'src/index.html'),
       hash: true
     }),
+    new CleanWebpackPlugin([path.resolve(root, 'dist'), path.resolve(root, 'docs')]),
     new webpack.HotModuleReplacementPlugin(),
   ],
   module: {
@@ -88,7 +90,7 @@ const config = {
         use: {
           loader: 'babel-loader',
         },
-        exclude: [/node_modules/, 'dist'],
+        exclude: [/node_modules/, 'dist', 'docs'],
       },
       {
         test: /\.css$/,

@@ -28,7 +28,7 @@ const config = {
     filename: '[name].[hash].js',
     chunkFilename: '[name].[chunkhash].js',
     path: path.resolve(root, 'docs'),
-    publicPath: '/',
+    publicPath: '',
   },
   optimization: {
     runtimeChunk: 'single',
@@ -80,7 +80,7 @@ const config = {
       template: path.resolve(root, 'src/index.html'),
       hash: true
     }),
-    new CleanWebpackPlugin([path.resolve(root, 'dist'), path.resolve(root, 'docs')]),
+    new CleanWebpackPlugin([path.resolve(root, 'docs')]),
     new webpack.HotModuleReplacementPlugin(),
   ],
   module: {

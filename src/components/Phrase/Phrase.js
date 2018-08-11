@@ -5,11 +5,46 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 import Letter from 'components/Letter/Letter'
-import { getPhraseSelector } from 'components/Phrase/phraseSelectors'
-import { reorderPhrase } from 'components/Phrase/phraseActions'
+import { getPhraseSelector, getIsDraggedSelector } from 'components/Phrase/phraseSelectors'
+import { reorderPhrase, dragLetter } from 'components/Phrase/phraseActions'
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+`
+
+const Body = styled.div`
+  position: absolute;
+  top: calc(50% - 36px);
+  left: 0;
+  width: 100%;
+  
+  &.fade-enter {
+    opacity: 0.01;
+    transform: translateX(-100%);
+  }
+
+  &.fade-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 250ms ease-out;
+  }
+
+  &.fade-exit {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  &.fade-exit-active {
+    opacity: 0.01;
+    transform: translateX(-100%);
+    transition: all 250ms ease-in;
+  }
+`
+
+const DraggedSpoiler = styled.div`
+  text-align: center;
+  transition: opacity 1s ease-in-out;
+  opacity: ${props => props.visible ? '1' : '0'};
 `
 
 const Letters = ({items, animatedLetterNumber}) => items.map((letter, index) => (
@@ -50,17 +85,24 @@ class Phrase extends Component {
   }
 
   componentDidMount () {
+    const { isDragged } = this.props
+    if (isDragged) return
+
     const int = setInterval(()=>{
-      this.setState({animatedLetterNumber: this.getAnimatedLetterNumber()})
+      this.setState({animatedLetterNumber: this.getRandomLetterNumber()})
     }, 6000)
 
     this.setState({
       int: int,
-      animatedLetterNumber: this.getAnimatedLetterNumber()
+      animatedLetterNumber: this.getRandomLetterNumber()
     })
   }
 
-  getAnimatedLetterNumber = () => {
+  componentWillUnmount() {
+    clearInterval(this.state.int)
+  }
+
+  getRandomLetterNumber = () => {
     const { phrase } = this.props
     return  Math.floor(Math.random() * phrase.length)
   }
@@ -71,7 +113,7 @@ class Phrase extends Component {
   }
 
   onDragEnd = result => {
-    const { phrase, reorderPhrase } = this.props
+    const { phrase, reorderPhrase, dragLetter } = this.props
 
     if (!result.destination) {
       return
@@ -84,43 +126,49 @@ class Phrase extends Component {
     )
 
     reorderPhrase(newPhrase)
+    dragLetter()
   }
 
   render() {
     const { animatedLetterNumber } = this.state
-    const { phrase } = this.props
+    const { phrase, isDragged } = this.props
 
     return (
-      <DragDropContext
-        onDragStart={this.onDragStart}
-        onDragEnd={this.onDragEnd}
-      >
-        <Droppable droppableId="droppable" direction="horizontal">
-          {(provided, snapshot) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              style={phraseStyle}
-            >
-              {
-                <Letters items={phrase} animatedLetterNumber={animatedLetterNumber} />
-              }
-              {
-                provided.placeholder
-              }
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <Body>
+        <DragDropContext
+          onDragStart={this.onDragStart}
+          onDragEnd={this.onDragEnd}
+        >
+          <Droppable droppableId="droppable" direction="horizontal">
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                style={phraseStyle}
+              >
+                {
+                  <Letters items={phrase} animatedLetterNumber={animatedLetterNumber} />
+                }
+                {
+                  provided.placeholder
+                }
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+        <DraggedSpoiler visible={isDragged}>Or you can click on any letter</DraggedSpoiler>
+      </Body>
     )
   }
 }
 
 export default connect(
   state => ({
-    phrase: getPhraseSelector(state)
+    phrase: getPhraseSelector(state),
+    isDragged: getIsDraggedSelector(state)
   }),
   {
-    reorderPhrase
+    reorderPhrase,
+    dragLetter
   }
 )(Phrase)

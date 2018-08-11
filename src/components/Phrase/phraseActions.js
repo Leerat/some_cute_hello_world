@@ -6,3 +6,9 @@ export function reorderPhrase(phrase) {
     payload: {phrase}
   }
 }
+
+export function dragLetter() {
+  return {
+    type: CON.DRAG_LETTER,
+  }
+}

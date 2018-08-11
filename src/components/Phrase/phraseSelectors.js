@@ -6,3 +6,8 @@ export const getPhraseSelector = createSelector(
   getPhrase,
   state => state.entity
 )
+
+export const getIsDraggedSelector = createSelector(
+  getPhrase,
+  state => state.isDragged
+)

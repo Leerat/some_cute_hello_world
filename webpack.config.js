@@ -26,7 +26,7 @@ const config = {
   output: {
     filename: '[name].[hash].js',
     chunkFilename: '[name].[chunkhash].js',
-    path: path.resolve(root, 'dist/client_dist'),
+    path: path.resolve(root, 'dist/'),
     publicPath: '/',
   },
   optimization: {

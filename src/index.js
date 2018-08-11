@@ -3,8 +3,8 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import 'normalize.css'
 
-import Root from 'components/Root/Root'
+import App from 'App'
 import configureStore from './store'
 const store = configureStore()
 
-render(<Provider store={store}><Root /></Provider>, document.getElementById('root'))
+render(<Provider store={store}><App /></Provider>, document.getElementById('root'))

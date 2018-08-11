@@ -4,17 +4,17 @@
   "description": "Some cute hello world",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --colors"
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --mode development --colors",
+    "build": "cross-env NODE_ENV=production webpack --mode production --colors --optimization-minimize",
+    "analyze": "cross-env ANALYZE=true npm run build"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.1",
-    "immutable": "^4.0.0-rc.9",
     "normalize.css": "^8.0.0",
     "react": "^16.4.2",
     "react-beautiful-dnd": "^9.0.0",
-    "react-dnd-html5-backend": "^5.0.1",
     "react-dom": "^16.4.2",
     "react-hot-loader": "^4.3.4",
     "react-redux": "^5.0.7",

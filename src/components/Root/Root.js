@@ -41,8 +41,8 @@ class Root extends Component {
           <TransitionGroup>
             <CSSTransition key={location.key} classNames="fade" timeout={500}>
               <Switch location={location} >
-                <Route exact path="/" component={Phrase} key="PhraseRoute" />
-                <Route exact path="/:letter([a-zA-Z])" component={BigLetter} key="LetterRoute" />
+                <Route exact path="/(some_cute_hello_world/|)" component={Phrase} key="PhraseRoute" />
+                <Route exact path="/(some_cute_hello_world/|):letter([a-zA-Z])" component={BigLetter} key="LetterRoute" />
                 <Route component={Missed} key="MissedRoute"/>
               </Switch>
             </CSSTransition>
